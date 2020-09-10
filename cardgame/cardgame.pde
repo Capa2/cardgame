@@ -2,7 +2,7 @@ Card[] cards = new Card[53]; // array of card objects. [0] not in use.
 StringList deck; // file list for card images.
 boolean dragAnyCard = false;
 int heldCardId = 0; // Global variable to store local object id of held card.
-int cardWidth = 69; // card images: 691px x 1056px
+int cardWidth = 69; // card images: 691px x 1056px.
 int cardHeight = 105;
 int edgePushX = 100; // push card start position right.
 int edgePushY = 50; // push card start position down.
@@ -79,14 +79,14 @@ class Card
   } // card() end.
 
   void update() // Update position and draw image in draw().
-  { /* Check if a card is eligable for hover/click interaction:
+  { /* Check if a card is eligible for hover/click interaction:
     Is the mouse X/Y pos GREATER than:
     the X/Y pos of the (center of the) card ..
     MINUS half the width/height of the card. (half means boundingBox == 0.5)
       AND Is the mouse X/Y pos LESS than:
     the X/Y pos of the (center of the) card
     PLUS half the width/height of the card.
-      AND no card is held or this card is held. */
+      AND no card is held or this card is held: */
     if (mouseX > x-w*boundingBox && mouseX < x+w*boundingBox &&
         mouseY > y-h*boundingBox && mouseY < y+h*boundingBox &&
         (!dragAnyCard || dragCard))
