@@ -1,23 +1,22 @@
-// card img 691 x 1056
-Card[] cards = new Card[53]; // array of card objects. 0 not in use.
+Card[] cards = new Card[53]; // array of card objects. [0] not in use.
 StringList deck; // file list for card images.
 boolean dragAnyCard = false;
-int heldCardId = 0; // Not used in any working code 22:00-10-09
-int cardWidth = 69; // 69px img size
-int cardHeight = 105; // 105px img size
-int edgePushX = 100; // push card start position down+right
-int edgePushY = 50; // push card start position down+right
-float cRow, cCol; // initial card position
+int heldCardId = 0; // Global variable to store local object id of held card.
+int cardWidth = 69; // card images: 691px x 1056px
+int cardHeight = 105;
+int edgePushX = 100; // push card start position right.
+int edgePushY = 50; // push card start position down.
+float cRow, cCol; // initial card position slot.
 
 void setup()
 {
   println("Setup in progress...\n");
   size(960, 1040);
-  frameRate(20);
+  frameRate(30);
   deck = new StringList("red_back.png", "AC.png", "AD.png", "AH.png", "AS.png", "2C.png", "2D.png", "2H.png", "2S.png", "3C.png","3D.png", "3H.png", "3S.png", "4C.png", "4D.png", "4H.png", "4S.png", "5C.png", "5D.png", "5H.png", "5S.png", "6C.png", "6D.png", "6H.png", "6S.png", "7C.png", "7D.png", "7H.png", "7S.png", "8C.png", "8D.png", "8H.png", "8S.png", "9C.png", "9D.png", "9H.png", "9S.png", "10C.png", "10D.png", "10H.png", "10S.png", "JC.png", "JD.png", "JH.png", "JS.png", "QC.png", "QD.png", "QH.png", "QS.png", "KC.png", "KD.png", "KH.png", "KS.png");
   // deck.get(n)  LIST:  C>D>H>S  CARDBACK-A-2-3-4-5-6-7-8-9-10-J-Q-K
 
-  for(int i = 1; i <= 52; i++) // setup cards.
+  for(int i = 1; i <= 52; i++) // setup cards starting pos and create cards.
   {
     float rx = edgePushX + cardWidth/2 + cCol*100; // card start pos X.
     float ry = edgePushY + cardHeight/2 + cRow*125; // card start pos Y.
@@ -66,8 +65,8 @@ class Card
 
   Card(int i, String img, float bx, float by)
   { // This function is basically setup() for objects (name = class name).
-    imageMode(CENTER); // draw img centered around it's X/Y pos.
-    imgsrc = loadImage(img); // load fed image (looks in /data folder).
+    imageMode(CENTER); // center img around its X/Y pos.
+    imgsrc = loadImage(img); // load fed image (from /data folder by default).
     hoverCard = false;
     dragCard = false;
     id = i;
@@ -75,7 +74,7 @@ class Card
     yOffset = 0;
     x = bx;
     y = by;
-    boundingBox = boundingBox/2; // This makes 1 == card size.
+    boundingBox = boundingBox/2; // This makes 1 == card size instead of 0.5.
     println("object created with ID: " + i + " / IMG: " + deck.get(i));
   } // card() end.
 
@@ -113,17 +112,15 @@ class Card
       dragCard = false;
     }
     
-    // Cba 2 make grid lol.
-    xGrid = round(x/gridSize)*gridSize;
-    yGrid = round(y/gridSize)*gridSize;
-    
     if(dragCard)
     { // Offset prevents card from centering on mouse pos when picking up.
       x = mouseX-xOffset;
       y = mouseY-yOffset;
     }
     else 
-    { // When card is dropped: align to nearest grid.
+    { // Lazy Mans Grid. When card is dropped: align to nearest % gridSize.
+      xGrid = round(x/gridSize)*gridSize;
+      yGrid = round(y/gridSize)*gridSize;
       x = xGrid;
       y = yGrid;  
     }
